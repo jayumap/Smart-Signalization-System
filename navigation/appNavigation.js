@@ -10,7 +10,6 @@ import useAuth from '../hooks/useAuth';
 
 const Stack = createNativeStackNavigator();
 
-
 export default function AppNavigation() {
   const { user } = useAuth();
   if (user) {
