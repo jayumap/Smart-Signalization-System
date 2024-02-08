@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import * as Location from 'expo-location';
+import TopBar from './TopBar';
+import BottomBar from './BottomBar';
 
 const HomeScreen = () => {
   const [region, setRegion] = useState(null);
@@ -38,8 +40,13 @@ const HomeScreen = () => {
     fetchLocation();
   }, []);
 
+  const ambulanceStatus = 'Available';
+  const ambulanceLocation = 'Current Location';
+  const ambulanceDriverName = 'John Doe';
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <TopBar onEmergencyPress={() => console.log('Emergency button pressed')} onProfilePress={() => console.log('Profile button pressed')} />
       <MapView
         style={{ flex: 1 }}
         initialRegion={region}
@@ -54,7 +61,8 @@ const HomeScreen = () => {
         /> */}
       </MapView>
 
-      <View style={{ position: 'absolute', top: 20, right: 20 }}>
+      {/* Logout Button Code */}
+      {/* <View style={{ position: 'absolute', top: 20, right: 20 }}>
         <TouchableOpacity
           onPress={handleLogout}
           style={{
@@ -68,7 +76,13 @@ const HomeScreen = () => {
             Logout
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
+
+      <BottomBar
+        status={ambulanceStatus}
+        location={ambulanceLocation}
+        driverName={ambulanceDriverName}
+      />
     </SafeAreaView>
   );
 };
