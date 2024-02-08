@@ -9,7 +9,6 @@ const EmergencyScreen = () => {
 
   return (
     <View>
-      <Text>Emergency Screen</Text>
       <Text>Ambulance Location: {ambulanceLocation}</Text>
     </View>
   );
