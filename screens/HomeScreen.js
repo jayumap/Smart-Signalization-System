@@ -7,12 +7,21 @@ import { auth } from '../config/firebase';
 import * as Location from 'expo-location';
 import TopBar from './TopBar';
 import BottomBar from './BottomBar';
+import { useNavigation } from '@react-navigation/native';
+import ambulanceIcon from '../assets/images/ambulanceiconmap.png';
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const [region, setRegion] = useState(null);
 
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const handleEmergencyPress = () => {
+    navigation.navigate('Emergency', {
+      location: region, // Assuming region is an object with latitude and longitude properties
+    });
   };
 
   const fetchLocation = async () => {
@@ -46,7 +55,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TopBar onEmergencyPress={() => console.log('Emergency button pressed')} onProfilePress={() => console.log('Profile button pressed')} />
+      {/* <TopBar onEmergencyPress={() => console.log('Emergency button pressed')} onProfilePress={() => console.log('Profile button pressed')} /> */}
       <MapView
         style={{ flex: 1 }}
         initialRegion={region}
@@ -54,11 +63,16 @@ const HomeScreen = () => {
         followsUserLocation={true}
       >
         {/* Example Marker */}
-        {/* <Marker
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-          title="Example Marker"
-          description="This is an example marker"
-        /> */}
+        {region && (
+          <Marker
+            coordinate={{ latitude: region.latitude, longitude: region.longitude }}
+            title="Ambulance"
+            description="Current Location"
+            image={ambulanceIcon}
+          />
+        )}
+
+
       </MapView>
 
       {/* Logout Button Code */}
@@ -78,10 +92,13 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View> */}
 
+
+
       <BottomBar
         status={ambulanceStatus}
-        location={ambulanceLocation}
+        location={region ? `Lat: ${region.latitude}, Lon: ${region.longitude}` : 'Unknown'}
         driverName={ambulanceDriverName}
+        onEmergencyPress={() => console.log('Emergency button pressed')}
       />
     </SafeAreaView>
   );
