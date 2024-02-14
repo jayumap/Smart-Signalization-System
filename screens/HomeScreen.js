@@ -20,7 +20,7 @@ const HomeScreen = () => {
 
   const handleEmergencyPress = () => {
     navigation.navigate('Emergency', {
-      location: region, // Assuming region is an object with latitude and longitude properties
+      location: region, 
     });
   };
 
