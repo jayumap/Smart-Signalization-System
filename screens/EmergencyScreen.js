@@ -1,14 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 const EmergencyScreen = () => {
   const route = useRoute();
   const { ambulanceLocation } = route.params || {};
   const [source, setSource] = useState('');
   const [destination, setDestination] = useState('');
+  const [region, setRegion] = useState(null);
   
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          console.error('Permission to access location was denied');
+          return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        setRegion({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
+      } catch (error) {
+        console.error('Error getting location', error);
+      }
+    };
+
+    // Fetch the user's current location
+    fetchLocation();
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -36,6 +62,25 @@ const EmergencyScreen = () => {
           <Text style={styles.buttonText}>Search</Text>
         </TouchableOpacity>
       </View>
+
+      {/* MapView */}
+      {region && (
+        <MapView
+          style={{ flex: 1 }}
+          initialRegion={region}
+          showsUserLocation={true}
+          followsUserLocation={true}
+        >
+          {/* Marker for Ambulance Location */}
+          {ambulanceLocation && (
+            <Marker
+            coordinate={{ latitude: region.latitude, longitude: region.longitude }} // Update this with the actual coordinates
+              title="Ambulance"
+              description="Ambulance Current Location"
+            />
+          )}
+        </MapView>
+      )}
     </View>
   );
 };
