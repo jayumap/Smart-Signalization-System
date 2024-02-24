@@ -34,8 +34,7 @@ const AppNavigation = () => {
                 iconName = 'user';
               }
 
-              // You can return any component here (not just FontAwesomeIcons),
-              // as long as it has the required `path` property.
+              
               return <Icon name={iconName} size={size} color={color} />;
             },
           })}
