@@ -8,10 +8,7 @@ import AppNavigation from './navigation/appNavigation';
 // import HomeScreen from './screens/HomeScreen';
 // import GameStore from './screens/gameStore';
 
-// const Tab = createBottomTabNavigator();
-// GoogleSignin.configure({
-//   webClientId: '686269354523-anlgu753btkia3jot1uuf51k4daiq3i1.apps.googleusercontent.com', 
-// });
+
 
 export default function App() {
   return (
