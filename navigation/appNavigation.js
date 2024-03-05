@@ -9,7 +9,7 @@ import SignUpScreen from '../screens/SignUpScreen';
 import useAuth from '../hooks/useAuth';
 import EmergencyScreen from '../screens/EmergencyScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
