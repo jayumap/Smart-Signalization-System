@@ -3,7 +3,10 @@ import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'rea
 import { useRoute } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import MapViewDirections from 'react-native-maps-directions';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
+const GOOGLE_MAPS_API_KEY = 'AIzaSyCLwuB9Cl9UX1CQLziyNI0xCWy0D7l0Qzw';
 
 const EmergencyScreen = () => {
   const route = useRoute();
@@ -11,7 +14,7 @@ const EmergencyScreen = () => {
   const [source, setSource] = useState('');
   const [destination, setDestination] = useState('');
   const [region, setRegion] = useState(null);
-  
+
   useEffect(() => {
     const fetchLocation = async () => {
       try {
@@ -41,24 +44,37 @@ const EmergencyScreen = () => {
     <View style={{ flex: 1 }}>
       {/* Input Fields for Source and Destination */}
       <View style={{ padding: 16 }}>
-        <Text>Source:</Text>
-        <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, borderRadius: 10, padding: 10, margin: 10 }}
+        {/* Source Autocomplete */}
+        <GooglePlacesAutocomplete
           placeholder="Enter source location"
-          value={source}
-          onChangeText={setSource}
+          onPress={(data, details = null) => {
+            setSource(details?.geometry?.location);
+          }}
+          query={{
+            key: GOOGLE_MAPS_API_KEY,
+            language: 'en',
+          }}
+          fetchDetails
         />
-        <Text>Destination:</Text>
-        <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, borderRadius: 10, padding: 10, margin: 10 }}
+        {/* Destination Autocomplete */}
+        <GooglePlacesAutocomplete
           placeholder="Enter destination location"
-          value={destination}
-          onChangeText={setDestination}
+          onPress={(data, details = null) => {
+            setDestination(details?.geometry?.location);
+          }}
+          query={{
+            key: GOOGLE_MAPS_API_KEY,
+            language: 'en',
+          }}
+          fetchDetails
         />
+
         {/* Search Button */}
         <TouchableOpacity
           style={styles.searchButton}
-          onPress={() => console.log('Search button pressed')}
+          onPress={() => {
+            // TODO: Implement fetching route using source and destination
+          }}
         >
           <Text style={styles.buttonText}>Search</Text>
         </TouchableOpacity>
@@ -75,9 +91,23 @@ const EmergencyScreen = () => {
           {/* Marker for Ambulance Location */}
           {ambulanceLocation && (
             <Marker
-            coordinate={{ latitude: region.latitude, longitude: region.longitude }} // Update this with the actual coordinates
+              coordinate={{
+                latitude: region.latitude,
+                longitude: region.longitude,
+              }}
               title="Ambulance"
               description="Ambulance Current Location"
+            />
+          )}
+
+          {/* MapViewDirections component for showing route */}
+          {source && destination && (
+            <MapViewDirections
+              origin={source}
+              destination={destination}
+              apikey={GOOGLE_MAPS_API_KEY}
+              strokeWidth={4}
+              strokeColor="blue"
             />
           )}
         </MapView>
@@ -87,15 +117,6 @@ const EmergencyScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    borderRadius: 10,
-    padding: 10,
-    margin: 10,
-  },
   searchButton: {
     backgroundColor: 'blue',
     padding: 15,
