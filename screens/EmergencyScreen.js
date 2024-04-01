@@ -42,43 +42,81 @@ const EmergencyScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Input Fields for Source and Destination */}
-      <View style={{ padding: 16 }}>
-        {/* Source Autocomplete */}
-        <GooglePlacesAutocomplete
-          placeholder="Enter source location"
-          onPress={(data, details = null) => {
-            setSource(details?.geometry?.location);
-          }}
-          query={{
-            key: GOOGLE_MAPS_API_KEY,
-            language: 'en',
-          }}
-          fetchDetails
-        />
-        {/* Destination Autocomplete */}
-        <GooglePlacesAutocomplete
-          placeholder="Enter destination location"
-          onPress={(data, details = null) => {
-            setDestination(details?.geometry?.location);
-          }}
-          query={{
-            key: GOOGLE_MAPS_API_KEY,
-            language: 'en',
-          }}
-          fetchDetails
-        />
+  {/* Input Fields for Source and Destination */}
+  <View style={{ padding: 16 }}>
+    {/* Source Autocomplete */}
+    <View style={{ marginBottom: 16 }}>
+      <GooglePlacesAutocomplete
+        placeholder="Enter source location"
+        onPress={(data, details = null) => {
+          setSource(details?.geometry?.location);
+        }}
+        query={{
+          key: GOOGLE_MAPS_API_KEY,
+          language: 'en',
+        }}
+        fetchDetails
+        styles={{
+          textInputContainer: {
+            backgroundColor: 'rgba(0,0,0,0)',
+            borderTopWidth: 0,
+            borderBottomWidth: 0,
+          },
+          textInput: {
+            marginLeft: 0,
+            marginRight: 0,
+            height: 38,
+            color: '#5d5d5d',
+            fontSize: 16,
+          },
+          predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+        }}
+      />
+    </View>
+    {/* Destination Autocomplete */}
+    <View style={{ marginBottom: 16, marginTop: 30 }}>
+      <GooglePlacesAutocomplete
+        placeholder="Enter destination location"
+        onPress={(data, details = null) => {
+          setDestination(details?.geometry?.location);
+        }}
+        query={{
+          key: GOOGLE_MAPS_API_KEY,
+          language: 'en',
+        }}
+        fetchDetails
+        styles={{
+          textInputContainer: {
+            backgroundColor: 'rgba(0,0,0,0)',
+            borderTopWidth: 0,
+            borderBottomWidth: 0,
+          },
+          textInput: {
+            marginLeft: 0,
+            marginRight: 0,
+            height: 38,
+            color: '#5d5d5d',
+            fontSize: 16,
+          },
+          predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+        }}
+      />
+    </View>
+    {/* Search Button */}
+    <TouchableOpacity
+      style={[styles.searchButton, { marginTop: 60 }]} // Adjusted marginTop
+      onPress={() => {
+        // TODO: Implement fetching route using source and destination
+      }}
+    >
+      <Text style={styles.buttonText}>Search</Text>
+    </TouchableOpacity>
+  </View>
 
-        {/* Search Button */}
-        <TouchableOpacity
-          style={styles.searchButton}
-          onPress={() => {
-            // TODO: Implement fetching route using source and destination
-          }}
-        >
-          <Text style={styles.buttonText}>Search</Text>
-        </TouchableOpacity>
-      </View>
 
       {/* MapView */}
       {region && (
